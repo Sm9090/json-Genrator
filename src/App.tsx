@@ -14,13 +14,21 @@ function App() {
     setIsVisible,
     courses,
   } = useCourseContext();
+  const [message ,setMessage] = React.useState<string | null>(null)
 
   const handleClickEvent = () => {
+    if(selectedCourse){
     setIsVisible(true);
+    setMessage(null)
+    }else{
+      setMessage('Please select a course')
+    }
   };
 
+  const selectedjson = courses.find((course : Course) => course.name === selectedCourse);
+
   const generatedJson = {
-    courses,
+    selectedCourse : selectedjson,
   };
 
   return (
@@ -37,9 +45,10 @@ function App() {
               onChange={(e) => setSelectedCourse(e.target.value as string)}
             >
               {courses.map((course : Course) => (
-                <option key={course.id} value={course.name}>{course.name}</option>
+                <option key={course.id} >{course.name}</option>
               ))}
             </select>
+            {message && <p className="text-red-500">{message}</p>}
             <button
               className="items-end border py-2 px-4 rounded-md border-blue-400 text-blue-400 hover:bg-blue-50 hover:border-blue-500"
               onClick={handleClickEvent}
